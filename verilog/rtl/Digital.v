@@ -1,9 +1,71 @@
 module Digital( // @[chipyard.TestHarness.EE290CBLEConfig.fir 295616:2]
+
+  // 
+  // Updates all right here! 
+  // 
+  output adc_clock; // Update: added
+  input [7:0] adc_data; // Update: added
+//   output  jtag_TDO_data_driven, // Update: removed
+//   output  gpio_0_0_ie, // Update: removed
+//   output  gpio_0_1_ie, // Update: removed
+//   output  gpio_0_2_ie, // Update: removed
+
+//   Updates: all `baseband*` signals removed 
+//   output        baseband_offChipMode_rx, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output        baseband_offChipMode_tx, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_data_tx_loFSK, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   input  [7:0]  baseband_data_rx_i_data, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   input  [7:0]  baseband_data_rx_q_data, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_data_loCT, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [10:0] baseband_data_pllD, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_tuning_trim_g0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_tuning_trim_g1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_tuning_trim_g2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_tuning_trim_g3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_tuning_trim_g4, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_tuning_trim_g5, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_tuning_trim_g6, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [7:0]  baseband_tuning_trim_g7, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_mixer_r0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_mixer_r1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_mixer_r2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_mixer_r3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [9:0]  baseband_tuning_i_vgaAtten, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r4, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r5, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r6, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r7, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r8, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_i_filter_r9, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [9:0]  baseband_tuning_q_vgaAtten, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r4, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r5, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r6, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r7, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r8, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [3:0]  baseband_tuning_q_filter_r9, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [5:0]  baseband_tuning_dac_t0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [5:0]  baseband_tuning_dac_t1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [5:0]  baseband_tuning_dac_t2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [5:0]  baseband_tuning_dac_t3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [4:0]  baseband_tuning_enable_rx_i, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [4:0]  baseband_tuning_enable_rx_q, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [9:0]  baseband_tuning_mux_dbg_in, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+//   output [9:0]  baseband_tuning_mux_dbg_out, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
+
+  
   input   jtag_TCK, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
   input   jtag_TMS, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
   input   jtag_TDI, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
   output  jtag_TDO_data, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
-  output  jtag_TDO_data_driven,
   
   output  serial_tl_clock, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
   output  serial_tl_bits_in_ready, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
@@ -13,70 +75,16 @@ module Digital( // @[chipyard.TestHarness.EE290CBLEConfig.fir 295616:2]
   output  serial_tl_bits_out_valid, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
   output  serial_tl_bits_out_bits, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
   
-  output        baseband_offChipMode_rx, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output        baseband_offChipMode_tx, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_data_tx_loFSK, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  input  [7:0]  baseband_data_rx_i_data, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  input  [7:0]  baseband_data_rx_q_data, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_data_loCT, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [10:0] baseband_data_pllD, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_tuning_trim_g0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_tuning_trim_g1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_tuning_trim_g2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_tuning_trim_g3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_tuning_trim_g4, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_tuning_trim_g5, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_tuning_trim_g6, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [7:0]  baseband_tuning_trim_g7, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_mixer_r0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_mixer_r1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_mixer_r2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_mixer_r3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [9:0]  baseband_tuning_i_vgaAtten, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r4, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r5, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r6, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r7, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r8, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_i_filter_r9, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [9:0]  baseband_tuning_q_vgaAtten, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r4, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r5, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r6, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r7, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r8, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [3:0]  baseband_tuning_q_filter_r9, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [5:0]  baseband_tuning_dac_t0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [5:0]  baseband_tuning_dac_t1, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [5:0]  baseband_tuning_dac_t2, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [5:0]  baseband_tuning_dac_t3, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [4:0]  baseband_tuning_enable_rx_i, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [4:0]  baseband_tuning_enable_rx_q, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [9:0]  baseband_tuning_mux_dbg_in, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-  output [9:0]  baseband_tuning_mux_dbg_out, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295620:4]
-
-  
   input   gpio_0_0_i,
   output  gpio_0_0_o,
-  output  gpio_0_0_ie,
   output  gpio_0_0_oe,
   
   input   gpio_0_1_i,
   output  gpio_0_1_o,
-  output  gpio_0_1_ie,
   output  gpio_0_1_oe,
 
   input   gpio_0_2_i,
   output  gpio_0_2_o,
-  output  gpio_0_2_ie,
   output  gpio_0_2_oe,
 
   output  spi_0_sck, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295622:4]
@@ -294,6 +302,14 @@ module Digital( // @[chipyard.TestHarness.EE290CBLEConfig.fir 295616:2]
   wire  _T = ~_debug_reset_syncd_WIRE; // @[Periphery.scala 297:38 chipyard.TestHarness.EE290CBLEConfig.fir 295716:4]
   wire  bundleIn_0_clock = system_auto_subsystem_cbus_fixedClockNode_out_clock; // @[Nodes.scala 1210:84 chipyard.TestHarness.EE290CBLEConfig.fir 295677:4 LazyModule.scala 296:16 chipyard.TestHarness.EE290CBLEConfig.fir 295683:4]
   reg  clock_en; // @[Periphery.scala 299:29 chipyard.TestHarness.EE290CBLEConfig.fir 295723:4]
+
+  // FIXME: update these temporary tie-offs
+  wire [7:0]  baseband_data_rx_i_data, baseband_data_rx_q_data;
+  assign baseband_data_rx_i_data = 8'b0;
+  assign baseband_data_rx_q_data = 8'b0;
+  wire gpio_0_0_ie, gpio_0_1_ie, gpio_0_2_ie;
+  assign adc_clock = 1'b0;
+
   DigitalTop system ( // @[ChipTop.scala 29:35 chipyard.TestHarness.EE290CBLEConfig.fir 295645:4]
     .clock(system_clock),
     .reset(system_reset),
