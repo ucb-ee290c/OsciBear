@@ -2,8 +2,6 @@
 High-Tech LEF Muckery Script
 """
 
-import enum
-import shutil
 from enum import Enum, auto
 from decimal import Decimal
 from io import TextIOWrapper, StringIO
@@ -76,15 +74,17 @@ def port_shrink(inp: TextIOWrapper, out: TextIOWrapper, x: int, y: int) -> None:
             sizey = 3520
             on_top = (y1 >= sizey) or (y2 >= sizey)
             on_bot = (y1 <= 0) or (y2 <= 0)
-            on_lf = (x1 >= sizex) or (x2 >= sizex)
-            on_rt = (x1 <= 0) or (x2 <= 0)
+            on_lf = (x1 <= 0) or (x2 <= 0)
+            on_rt = (x1 >= sizex) or (x2 >= sizex)
 
             # And sort out shifts accordingly
             if not (on_top or on_bot or on_lf or on_rt):
+                raise TabError
                 # Middle pin; move in both directions (?)
                 print(f"Moving middle port {line}")
                 shifts = (-x, -y)
             if on_top:
+                raise TabError  # Just not dealing with these; no need to yet
                 assert not (on_bot or on_lf or on_rt)
                 shifts = (-x, -2 * y)
             elif on_bot:
@@ -308,7 +308,7 @@ def get_some_verilog() -> (str, str):
     assigns = str()
 
     for n, io in enumerate(ios):
-        if io is None:  
+        if io is None:
             # Unused: tie `out` low, tie `oeb` high (input mode), leave `in` unconnected
             assigns += f"assign io_out[{n}] = 1'b0; // Unused \n"
             assigns += f"assign io_oeb[{n}] = 1'b1; // Unused \n"
@@ -327,7 +327,7 @@ def get_some_verilog() -> (str, str):
             assigns += f"assign io_out[{n}] = 1'b0; // {name} \n"
             assigns += f"assign io_oeb[{n}] = 1'b1; // {name} \n"
         elif tp == Dir.INOUT:
-            # Input: connect all three of `in`, `out`, `oeb` 
+            # Input: connect all three of `in`, `out`, `oeb`
             in_name, out_name, oe_name = io[1], io[2], io[3]
             conns += f".{in_name}(io_in[{n}]), \n"
             conns += f".{out_name}(io_out[{n}]), \n"
@@ -338,6 +338,109 @@ def get_some_verilog() -> (str, str):
     return (conns, assigns)
 
 
+@wrap
+def edit_size(inp: TextIOWrapper, out: TextIOWrapper, x: int, y: int) -> None:
+    """Edit the SIZE directive by delta (x,y)"""
+    for line in inp.readlines():
+        if line.strip().startswith("SIZE"):
+            parts = line.split()
+            if len(parts) != 5:
+                raise TabError
+            _size, sx, _by, sy, _semi = parts
+            sx = Decimal(sx).quantize(Decimal("0.001"))
+            sy = Decimal(sy).quantize(Decimal("0.001"))
+            sx += x
+            sy += y
+            newline = f"  SIZE {sx} BY {sy} ;"
+            out.write(newline)
+        else:
+            out.write(line)
+
+
+@wrap
+def shift_pins(
+    inp: TextIOWrapper, out: TextIOWrapper, patterns: List[str], x: int, y: int
+) -> None:
+    """
+    Shift all pins which match `patterns` by (x,y)
+    """
+
+    def start_state(line: str) -> callable:
+        """LEF Start/ "Everything but Ports and Pins" State"""
+        out.write(line)  # Write all as-is
+        if line.strip().startswith("PIN"):
+            for pattern in patterns:
+                if pattern in line:
+                    return move_pin_state
+            return keep_pin_state
+        return start_state
+
+    def keep_pin_state(line: str) -> callable:
+        """LEF State inside a "PIN" declaration"""
+        out.write(line)  # Write everything as-is
+        if line.strip().startswith("PORT"):
+            return keep_port_state
+        if line.strip().startswith("END"):
+            return start_state
+        return keep_pin_state
+
+    def move_pin_state(line: str) -> callable:
+        out.write(line)  # Write everything as-is
+        if line.strip().startswith("PORT"):
+            return move_port_state
+        if line.strip().startswith("END"):
+            return start_state
+        return move_pin_state
+
+    def keep_port_state(line: str) -> callable:
+        out.write(line)  # Write everything as-is
+        if line.strip().startswith("END"):
+            return keep_pin_state
+        return keep_port_state
+
+    def move_port_state(line: str) -> callable:
+        """Inside a PORT section. Shift every RECT statement."""
+
+        if line.strip().startswith("RECT"):
+            # Finally we get to the action!
+            parts = line.split()
+            if len(parts) != 6:
+                raise RuntimeError(f"Invalid RECT line: {line}")
+            rect, x1, y1, x2, y2, semicolon = parts
+            if rect != "RECT" or semicolon != ";":
+                raise RuntimeError(f"Invalid RECT line: {line}")
+
+            # Turn each into three-place Decimal values
+            def decimize(s: str) -> Decimal:
+                return Decimal(s).quantize(Decimal("0.001"))
+
+            x1, y1, x2, y2 = decimize(x1), decimize(y1), decimize(x2), decimize(y2)
+
+            x1 += x
+            x2 += x
+            y1 += y
+            y2 += y
+
+            newline = f"        RECT {x1} {y1} {x2} {y2} ;\n"
+            print(f"Updating: {line}\n  to \n{newline}")
+            out.write(newline)
+            return move_port_state
+
+        # Any other line; write it as-is
+        out.write(line)
+        # Jump up to the "PIN" state if we hit "END"
+        if line.strip().startswith("END"):
+            return move_pin_state
+        return move_port_state
+
+    # The fun part: running the state machine
+    state = start_state
+    line = inp.readline()
+    while line:
+        state = state(line)
+        line = inp.readline()
+
+
 def main():
     inf = "lef/osci-digital-input.lef"
     inp = StringIO(open(inf, "r").read())
@@ -346,6 +449,8 @@ def main():
     adc_pins = {f"wbs_adr_i[{n}]": f"adc_data[{n}]" for n in range(8)}
     adc_pins["wb_clk_i"] = "adc_clk"
     inp = rename_pins(inp, adc_pins)
+    # Shift those right, more or less to the center
+    inp = shift_pins(inp, list(adc_pins.values()), x=1460, y=0)
 
     # Remove pins meeting all these patterns
     inp = remove_pins(
@@ -374,11 +479,20 @@ def main():
         inp = update_io(inp, n, io)
 
     # Pull in pins around the boundary to match our shrink
-    # inp = port_shrink(
-    #     inp,
-    #     x=5,
-    #     y=5,
-    # )
+    inp = port_shrink(
+        inp,
+        x=10,
+        y=5,
+    )
+    # Make a corresponding edit to the size,
+    # and hack out the analog area while we're at it
+    inp = edit_size(
+        inp,
+        x=-20,
+        y=-905,
+    )
+    # Shift those ADC pins to the top 
+    inp = shift_pins(inp, list(adc_pins.values()), x=0, y=2615)
 
     # And don't forget to copy the final file!
     open("lef/osci-digital.lef", "w").write(inp.getvalue())

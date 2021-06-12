@@ -8,294 +8,293 @@ MACRO DIGITALTBD
   ORIGIN 0.000 0.000 ;
   
   # FIXME: Reduce from `caravel_user` by (10x10)um (5um per side)
-  SIZE 2920.000 BY 3520.000 ;
-
+  SIZE 2900.000 BY 2615.000 ;
   PIN reset_wire_reset
     PORT
       LAYER met3 ;
-        RECT 2917.600 2044.210 2924.000 2044.770 ;
+        RECT 2897.600 2039.210 2904.000 2039.770 ;
     END
   END reset_wire_reset
   PIN clock
     PORT
       LAYER met3 ;
-        RECT 2917.600 2266.320 2924.000 2266.880 ;
+        RECT 2897.600 2261.320 2904.000 2261.880 ;
     END
   END clock
   PIN spi_0_dq_0_i
     PORT
       LAYER met3 ;
-        RECT -4.000 2107.700 2.400 2108.260 ;
+        RECT -4.000 2102.700 2.400 2103.260 ;
     END
   END spi_0_dq_0_i
   PIN spi_0_dq_1_i
     PORT
       LAYER met3 ;
-        RECT -4.000 1891.590 2.400 1892.150 ;
+        RECT -4.000 1886.590 2.400 1887.150 ;
     END
   END spi_0_dq_1_i
   PIN spi_0_dq_2_i
     PORT
       LAYER met3 ;
-        RECT -4.000 1675.480 2.400 1676.040 ;
+        RECT -4.000 1670.480 2.400 1671.040 ;
     END
   END spi_0_dq_2_i
   PIN spi_0_dq_3_i
     PORT
       LAYER met3 ;
-        RECT -4.000 1459.370 2.400 1459.930 ;
+        RECT -4.000 1454.370 2.400 1454.930 ;
     END
   END spi_0_dq_3_i
   PIN bsel
     PORT
       LAYER met3 ;
-        RECT -4.000 1244.260 2.400 1244.820 ;
+        RECT -4.000 1239.260 2.400 1239.820 ;
     END
   END bsel
   PIN jtag_TCK
     PORT
       LAYER met3 ;
-        RECT -4.000 606.150 2.400 606.710 ;
+        RECT -4.000 601.150 2.400 601.710 ;
     END
   END jtag_TCK
   PIN jtag_TMS
     PORT
       LAYER met3 ;
-        RECT -4.000 390.040 2.400 390.600 ;
+        RECT -4.000 385.040 2.400 385.600 ;
     END
   END jtag_TMS
   PIN jtag_TDI
     PORT
       LAYER met3 ;
-        RECT -4.000 173.930 2.400 174.490 ;
+        RECT -4.000 168.930 2.400 169.490 ;
     END
   END jtag_TDI
   PIN uart_0_rxd
     PORT
       LAYER met3 ;
-        RECT -4.000 19.540 2.400 20.100 ;
+        RECT -4.000 14.540 2.400 15.100 ;
     END
   END uart_0_rxd
   PIN serial_tl_bits_in_valid
     PORT
       LAYER met3 ;
-        RECT 2917.600 60.910 2924.000 61.470 ;
+        RECT 2897.600 55.910 2904.000 56.470 ;
     END
   END serial_tl_bits_in_valid
   PIN serial_tl_bits_in_bits
     PORT
       LAYER met3 ;
-        RECT 2917.600 84.550 2924.000 85.110 ;
+        RECT 2897.600 79.550 2904.000 80.110 ;
     END
   END serial_tl_bits_in_bits
   PIN serial_tl_bits_out_ready
     PORT
       LAYER met3 ;
-        RECT 2917.600 108.190 2924.000 108.750 ;
+        RECT 2897.600 103.190 2904.000 103.750 ;
     END
   END serial_tl_bits_out_ready
   PIN gpio_0_0_i
     PORT
       LAYER met3 ;
-        RECT 2917.600 1363.880 2924.000 1364.440 ;
+        RECT 2897.600 1358.880 2904.000 1359.440 ;
     END
   END gpio_0_0_i
   PIN gpio_0_1_i
     PORT
       LAYER met3 ;
-        RECT 2917.600 1585.990 2924.000 1586.550 ;
+        RECT 2897.600 1580.990 2904.000 1581.550 ;
     END
   END gpio_0_1_i
   PIN gpio_0_2_i
     PORT
       LAYER met3 ;
-        RECT 2917.600 1812.100 2924.000 1812.660 ;
+        RECT 2897.600 1807.100 2904.000 1807.660 ;
     END
   END gpio_0_2_i
   PIN spi_0_dq_0_oe
     PORT
       LAYER met3 ;
-        RECT -4.000 2095.880 69.555 2096.440 ;
+        RECT -4.000 2090.880 2.400 2091.440 ;
     END
   END spi_0_dq_0_oe
   PIN spi_0_dq_1_oe
     PORT
       LAYER met3 ;
-        RECT -4.000 1879.770 2.400 1880.330 ;
+        RECT -4.000 1874.770 2.400 1875.330 ;
     END
   END spi_0_dq_1_oe
   PIN spi_0_dq_2_oe
     PORT
       LAYER met3 ;
-        RECT -4.000 1663.660 2.400 1664.220 ;
+        RECT -4.000 1658.660 2.400 1659.220 ;
     END
   END spi_0_dq_2_oe
   PIN spi_0_dq_3_oe
     PORT
       LAYER met3 ;
-        RECT -4.000 1447.550 2.400 1448.110 ;
+        RECT -4.000 1442.550 2.400 1443.110 ;
     END
   END spi_0_dq_3_oe
   PIN gpio_0_0_oe
     PORT
       LAYER met3 ;
-        RECT 2917.600 1375.700 2924.000 1376.260 ;
+        RECT 2897.600 1370.700 2904.000 1371.260 ;
     END
   END gpio_0_0_oe
   PIN gpio_0_1_oe
     PORT
       LAYER met3 ;
-        RECT 2917.600 1597.810 2924.000 1598.370 ;
+        RECT 2897.600 1592.810 2904.000 1593.370 ;
     END
   END gpio_0_1_oe
   PIN gpio_0_2_oe
     PORT
       LAYER met3 ;
-        RECT 2917.600 1823.920 2924.000 1824.480 ;
+        RECT 2897.600 1818.920 2904.000 1819.480 ;
     END
   END gpio_0_2_oe
   PIN serial_tl_clock
     PORT
       LAYER met3 ;
-        RECT 2917.600 19.540 2924.000 20.100 ;
+        RECT 2897.600 14.540 2904.000 15.100 ;
     END
   END serial_tl_clock
   PIN spi_0_sck
     PORT
       LAYER met3 ;
-        RECT -4.000 2534.010 2.400 2534.570 ;
+        RECT -4.000 2529.010 2.400 2529.570 ;
     END
   END spi_0_sck
   PIN spi_0_cs_0
     PORT
       LAYER met3 ;
-        RECT -4.000 2317.900 1705.395 2318.460 ;
+        RECT -4.000 2312.900 2.400 2313.460 ;
     END
   END spi_0_cs_0
   PIN spi_0_dq_0_o
     PORT
       LAYER met3 ;
-        RECT -4.000 2101.790 1709.250 2102.350 ;
+        RECT -4.000 2096.790 2.400 2097.350 ;
     END
   END spi_0_dq_0_o
   PIN spi_0_dq_1_o
     PORT
       LAYER met3 ;
-        RECT -4.000 1885.680 2.400 1886.240 ;
+        RECT -4.000 1880.680 2.400 1881.240 ;
     END
   END spi_0_dq_1_o
   PIN spi_0_dq_2_o
     PORT
       LAYER met3 ;
-        RECT -4.000 1669.570 2.400 1670.130 ;
+        RECT -4.000 1664.570 2.400 1665.130 ;
     END
   END spi_0_dq_2_o
   PIN spi_0_dq_3_o
     PORT
       LAYER met3 ;
-        RECT -4.000 1453.460 2.400 1454.020 ;
+        RECT -4.000 1448.460 2.400 1449.020 ;
     END
   END spi_0_dq_3_o
   PIN serial_tl_bits_in_ready
     PORT
       LAYER met3 ;
-        RECT 2917.600 43.180 2924.000 43.740 ;
+        RECT 2897.600 38.180 2904.000 38.740 ;
     END
   END serial_tl_bits_in_ready
   PIN jtag_TDO_data
     PORT
       LAYER met3 ;
-        RECT -4.000 60.910 2.400 61.470 ;
+        RECT -4.000 55.910 2.400 56.470 ;
     END
   END jtag_TDO_data
   PIN uart_0_txd
     PORT
       LAYER met3 ;
-        RECT -4.000 37.270 2.400 37.830 ;
+        RECT -4.000 32.270 2.400 32.830 ;
     END
   END uart_0_txd
   PIN serial_tl_bits_out_valid
     PORT
       LAYER met3 ;
-        RECT 2917.600 246.390 2924.000 246.950 ;
+        RECT 2897.600 241.390 2904.000 241.950 ;
     END
   END serial_tl_bits_out_valid
   PIN serial_tl_bits_out_bits
     PORT
       LAYER met3 ;
-        RECT 2917.600 469.680 2924.000 470.240 ;
+        RECT 2897.600 464.680 2904.000 465.240 ;
     END
   END serial_tl_bits_out_bits
   PIN gpio_0_0_o
     PORT
       LAYER met3 ;
-        RECT 2917.600 1369.790 2924.000 1370.350 ;
+        RECT 2897.600 1364.790 2904.000 1365.350 ;
     END
   END gpio_0_0_o
   PIN gpio_0_1_o
     PORT
       LAYER met3 ;
-        RECT 2917.600 1591.900 2924.000 1592.460 ;
+        RECT 2897.600 1586.900 2904.000 1587.460 ;
     END
   END gpio_0_1_o
   PIN gpio_0_2_o
     PORT
       LAYER met3 ;
-        RECT 2917.600 1818.010 2924.000 1818.570 ;
+        RECT 2897.600 1813.010 2904.000 1813.570 ;
     END
   END gpio_0_2_o
   PIN adc_clk
     PORT
       LAYER met2 ;
-        RECT 2.620 -4.000 3.180 2.400 ;
+        RECT 1452.620 2611.000 1453.180 2617.400 ;
     END
   END adc_clk
   PIN adc_data[0]
     PORT
       LAYER met2 ;
-        RECT 38.080 -4.000 38.640 2.400 ;
+        RECT 1488.080 2611.000 1488.640 2617.400 ;
     END
   END adc_data[0]
   PIN adc_data[1]
     PORT
       LAYER met2 ;
-        RECT 61.720 -4.000 62.280 2.400 ;
+        RECT 1511.720 2611.000 1512.280 2617.400 ;
     END
   END adc_data[1]
   PIN adc_data[2]
     PORT
       LAYER met2 ;
-        RECT 85.360 -4.000 85.920 2.400 ;
+        RECT 1535.360 2611.000 1535.920 2617.400 ;
     END
   END adc_data[2]
   PIN adc_data[3]
     PORT
       LAYER met2 ;
-        RECT 109.000 -4.000 109.560 2.400 ;
+        RECT 1559.000 2611.000 1559.560 2617.400 ;
     END
   END adc_data[3]
   PIN adc_data[4]
     PORT
       LAYER met2 ;
-        RECT 132.640 -4.000 133.200 2.400 ;
+        RECT 1582.640 2611.000 1583.200 2617.400 ;
     END
   END adc_data[4]
   PIN adc_data[5]
     PORT
       LAYER met2 ;
-        RECT 150.370 -4.000 150.930 2.400 ;
+        RECT 1600.370 2611.000 1600.930 2617.400 ;
     END
   END adc_data[5]
   PIN adc_data[6]
     PORT
       LAYER met2 ;
-        RECT 168.100 -4.000 168.660 2.400 ;
+        RECT 1618.100 2611.000 1618.660 2617.400 ;
     END
   END adc_data[6]
   PIN adc_data[7]
     PORT
       LAYER met2 ;
-        RECT 185.830 -4.000 186.390 2.400 ;
+        RECT 1635.830 2611.000 1636.390 2617.400 ;
     END
   END adc_data[7]
   OBS 

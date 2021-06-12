@@ -127,7 +127,7 @@ MACRO DIGITALTBD
   PIN gpio_analog[7]
     PORT
       LAYER met3 ;
-        RECT -4.000 2557.650 1700.360 2558.210 ;
+        RECT -4.000 2557.650 2.400 2558.210 ;
     END
   END gpio_analog[7]
   PIN gpio_analog[8]
@@ -727,13 +727,13 @@ MACRO DIGITALTBD
   PIN io_oeb[15]
     PORT
       LAYER met3 ;
-        RECT -4.000 2311.990 69.485 2312.550 ;
+        RECT -4.000 2311.990 2.400 2312.550 ;
     END
   END io_oeb[15]
   PIN io_oeb[16]
     PORT
       LAYER met3 ;
-        RECT -4.000 2095.880 69.555 2096.440 ;
+        RECT -4.000 2095.880 2.400 2096.440 ;
     END
   END io_oeb[16]
   PIN io_oeb[17]
@@ -889,13 +889,13 @@ MACRO DIGITALTBD
   PIN io_out[15]
     PORT
       LAYER met3 ;
-        RECT -4.000 2317.900 1705.395 2318.460 ;
+        RECT -4.000 2317.900 2.400 2318.460 ;
     END
   END io_out[15]
   PIN io_out[16]
     PORT
       LAYER met3 ;
-        RECT -4.000 2101.790 1709.250 2102.350 ;
+        RECT -4.000 2101.790 2.400 2102.350 ;
     END
   END io_out[16]
   PIN io_out[17]
