@@ -312,7 +312,7 @@ module core(
   // Analog Pins 
   inout [`ANALOG_PADS-1:0] io_analog,
   inout [2:0] io_clamp_high,    // FIXME: handling these
-  inout [2:0] io_clamp_low,     // FIXME: handling these
+  inout [2:0] io_clamp_low      // FIXME: handling these
 );
 
   // Digital-Analog Interface Signals 
@@ -322,6 +322,9 @@ module core(
   
 // Digital Instance 
 Digital xdig (
+  .adc_clock(adc_clock),
+  .adc_data(adc_data),
+  
   .jtag_TCK(jtag_TCK), 
   .jtag_TMS(jtag_TMS), 
   .jtag_TDI(jtag_TDI), 
@@ -337,16 +340,12 @@ Digital xdig (
   
   .gpio_0_0_i(gpio_0_0_i),
   .gpio_0_0_o(gpio_0_0_o),
-  .gpio_0_0_ie(gpio_0_0_ie),
   .gpio_0_0_oe(gpio_0_0_oe),
-  
   .gpio_0_1_i(gpio_0_1_i),
   .gpio_0_1_o(gpio_0_1_o),
-  .gpio_0_1_ie(gpio_0_1_ie),
   .gpio_0_1_oe(gpio_0_1_oe),
   .gpio_0_2_i(gpio_0_2_i),
   .gpio_0_2_o(gpio_0_2_o),
-  .gpio_0_2_ie(gpio_0_2_ie),
   .gpio_0_2_oe(gpio_0_2_oe),
 
   .spi_0_sck(spi_0_sck), 
@@ -368,7 +367,7 @@ Digital xdig (
   .uart_0_rxd(uart_0_rxd), 
   .bsel(bsel), 
   .reset_wire_reset(reset_wire_reset), 
-  .clock(clock), 
+  .clock(clock) 
 );
 // Analog Instance 
 ana xana (
@@ -378,7 +377,7 @@ ana xana (
   .adc_data(adc_data),
   .io_analog(io_analog),
   .io_clamp_high(io_clamp_high),   // FIXME: handling these
-  .io_clamp_low(io_clamp_low),     // FIXME: handling these
+  .io_clamp_low(io_clamp_low)      // FIXME: handling these
 );
 
 endmodule
@@ -392,7 +391,7 @@ module ana (
     output [7:0]   adc_data,
     inout [`ANALOG_PADS-1:0] io_analog,
     inout [2:0] io_clamp_high,    // FIXME: handling these
-    inout [2:0] io_clamp_low,     // FIXME: handling these
+    inout [2:0] io_clamp_low      // FIXME: handling these
 );
 endmodule
 
@@ -402,8 +401,8 @@ endmodule
 /// IO frame matching the PnR target
 /// 
 module Digital( // @[chipyard.TestHarness.EE290CBLEConfig.fir 295616:2]
-  output adc_clock; 
-  input [7:0] adc_data; 
+  output adc_clock,
+  input [7:0] adc_data,
   input   jtag_TCK, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
   input   jtag_TMS, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
   input   jtag_TDI, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
