@@ -2,6 +2,7 @@
 High-Tech LEF Muckery Script
 """
 
+import enum
 import shutil
 from enum import Enum, auto
 from decimal import Decimal
@@ -121,51 +122,6 @@ def port_shrink(inp: TextIOWrapper, out: TextIOWrapper, x: int, y: int) -> None:
         line = inp.readline()
 
 
-class Dir(Enum):
-    INPUT = auto()
-    OUTPUT = auto()
-    INOUT = auto()
-
-
-# Chip-level IO, ordered by eFabless bus bit, mapping to our signal-name and direction
-ios = [
-    # Bottom-right
-    (Dir.OUTPUT, "serial_tl_clock"),
-    (Dir.OUTPUT, "serial_tl_bits_in_ready"),
-    (Dir.INPUT, "serial_tl_bits_in_valid"),
-    (Dir.INPUT, "serial_tl_bits_in_bits"),
-    (Dir.INPUT, "serial_tl_bits_out_ready"),
-    (Dir.OUTPUT, "serial_tl_bits_out_valid"),
-    (Dir.OUTPUT, "serial_tl_bits_out_bits"),
-    # Top-right
-    (Dir.INOUT, "gpio_0_0_i", "gpio_0_0_o", "gpio_0_0_oe"),
-    (Dir.INOUT, "gpio_0_1_i", "gpio_0_1_o", "gpio_0_1_oe"),
-    (Dir.INOUT, "gpio_0_2_i", "gpio_0_2_o", "gpio_0_2_oe"),
-    (Dir.INPUT, "reset_wire_reset"),  # FIXME: is that really our name? OK fine.
-    (Dir.INPUT, "clock"),
-    None,
-    # Bit 13, outside
-    None,
-    # Top-Left
-    (Dir.OUTPUT, "spi_0_sck"),
-    (Dir.OUTPUT, "spi_0_cs_0"),
-    (Dir.INOUT, "spi_0_dq_0_i", "spi_0_dq_0_o", "spi_0_dq_0_oe"),
-    (Dir.INOUT, "spi_0_dq_1_i", "spi_0_dq_1_o", "spi_0_dq_1_oe"),
-    (Dir.INOUT, "spi_0_dq_2_i", "spi_0_dq_2_o", "spi_0_dq_2_oe"),
-    (Dir.INOUT, "spi_0_dq_3_i", "spi_0_dq_3_o", "spi_0_dq_3_oe"),
-    (Dir.INPUT, "bsel"),
-    # Bottom Left
-    (Dir.INPUT, "jtag_TCK"),
-    (Dir.INPUT, "jtag_TMS"),
-    (Dir.INPUT, "jtag_TDI"),
-    (Dir.OUTPUT, "jtag_TDO_data"),
-    (Dir.OUTPUT, "uart_0_txd"),
-    (Dir.OUTPUT, "uart_0_rxd"),
-]
-
-assert len(ios) == 27, f"Bad-length IO: {len(ios)}"
-
-
 @wrap
 def rename_pins(inp: TextIOWrapper, out: TextIOWrapper, repls: Dict[str, str]) -> None:
     def start_state(line: str) -> callable:
@@ -283,6 +239,105 @@ def update_io(inp: TextIOWrapper, n: int, io: tuple) -> None:
     raise ValueError
 
 
+def getpins(inp: TextIOWrapper) -> List[str]:
+    """Get and return a list of pin names"""
+    rv = list()
+    for line in inp.readlines():
+        if line.strip().startswith("PIN"):
+            parts = line.split()
+            if len(parts) != 2:
+                raise TabError
+            _pin, name = parts
+            rv.append(name)
+    return rv
+
+
+class Dir(Enum):
+    INPUT = auto()
+    OUTPUT = auto()
+    INOUT = auto()
+
+
+# Chip-level IO, ordered by eFabless bus bit, mapping to our signal-name and direction
+ios = [
+    # Bottom-right
+    (Dir.OUTPUT, "serial_tl_clock"),
+    (Dir.OUTPUT, "serial_tl_bits_in_ready"),
+    (Dir.INPUT, "serial_tl_bits_in_valid"),
+    (Dir.INPUT, "serial_tl_bits_in_bits"),
+    (Dir.INPUT, "serial_tl_bits_out_ready"),
+    (Dir.OUTPUT, "serial_tl_bits_out_valid"),
+    (Dir.OUTPUT, "serial_tl_bits_out_bits"),
+    # Top-right
+    (Dir.INOUT, "gpio_0_0_i", "gpio_0_0_o", "gpio_0_0_oe"),
+    (Dir.INOUT, "gpio_0_1_i", "gpio_0_1_o", "gpio_0_1_oe"),
+    (Dir.INOUT, "gpio_0_2_i", "gpio_0_2_o", "gpio_0_2_oe"),
+    (Dir.INPUT, "reset_wire_reset"),  # FIXME: is that really our name? OK fine.
+    (Dir.INPUT, "clock"),
+    None,
+    # Bit 13, outside
+    None,
+    # Top-Left
+    (Dir.OUTPUT, "spi_0_sck"),
+    (Dir.OUTPUT, "spi_0_cs_0"),
+    (Dir.INOUT, "spi_0_dq_0_i", "spi_0_dq_0_o", "spi_0_dq_0_oe"),
+    (Dir.INOUT, "spi_0_dq_1_i", "spi_0_dq_1_o", "spi_0_dq_1_oe"),
+    (Dir.INOUT, "spi_0_dq_2_i", "spi_0_dq_2_o", "spi_0_dq_2_oe"),
+    (Dir.INOUT, "spi_0_dq_3_i", "spi_0_dq_3_o", "spi_0_dq_3_oe"),
+    (Dir.INPUT, "bsel"),
+    # Bottom Left
+    (Dir.INPUT, "jtag_TCK"),
+    (Dir.INPUT, "jtag_TMS"),
+    (Dir.INPUT, "jtag_TDI"),
+    (Dir.OUTPUT, "jtag_TDO_data"),
+    (Dir.OUTPUT, "uart_0_txd"),
+    (Dir.INPUT, "uart_0_rxd"),
+]
+
+assert len(ios) == 27, f"Bad-length IO: {len(ios)}"
+
+
+def get_some_verilog() -> (str, str):
+    """
+    Create two piles of Verilog,
+    targeted for pasting into a larger module:
+    * By-name pin connections for everything in `ios`
+    * Assignments for all signals that need tying off
+    """
+    conns = str()
+    assigns = str()
+
+    for n, io in enumerate(ios):
+        if io is None:  
+            # Unused: tie `out` low, tie `oeb` high (input mode), leave `in` unconnected
+            assigns += f"assign io_out[{n}] = 1'b0; // Unused \n"
+            assigns += f"assign io_oeb[{n}] = 1'b1; // Unused \n"
+            continue
+
+        tp = io[0]
+        if tp == Dir.OUTPUT:
+            # Output: connect `out`, tie `oeb` low, leave `in` unconnected
+            name = io[1]
+            conns += f".{name}(io_out[{n}]), \n"
+            assigns += f"assign io_oeb[{n}] = 1'b0; // {name} \n"
+        elif tp == Dir.INPUT:
+            # Input: connect `in`, tie `out` low, tie `oeb` high
+            name = io[1]
+            conns += f".{name}(io_in[{n}]), \n"
+            assigns += f"assign io_out[{n}] = 1'b0; // {name} \n"
+            assigns += f"assign io_oeb[{n}] = 1'b1; // {name} \n"
+        elif tp == Dir.INOUT:
+            # Input: connect all three of `in`, `out`, `oeb` 
+            in_name, out_name, oe_name = io[1], io[2], io[3]
+            conns += f".{in_name}(io_in[{n}]), \n"
+            conns += f".{out_name}(io_out[{n}]), \n"
+            conns += f".{oe_name}(io_oeb[{n}]), \n"
+        else:
+            raise ValueError
+
+    return (conns, assigns)
+
+
 def main():
     inf = "lef/osci-digital-input.lef"
     inp = StringIO(open(inf, "r").read())
@@ -328,23 +383,18 @@ def main():
     # And don't forget to copy the final file!
     open("lef/osci-digital.lef", "w").write(inp.getvalue())
 
+    print("Pin List: \n\n")
     pins = getpins(inp)
     print(f"Num Pins: {len(pins)}")
     for pin in pins:
         print(pin)
+    print("\n\n")
 
-
-def getpins(inp: TextIOWrapper) -> List[str]:
-    """Get and return a list of pin names"""
-    rv = list()
-    for line in inp.readlines():
-        if line.strip().startswith("PIN"):
-            parts = line.split()
-            if len(parts) != 2:
-                raise TabError
-            _pin, name = parts
-            rv.append(name)
-    return rv
+    print("Some Verilog Help: \n\n")
+    conns, assigns = get_some_verilog()
+    print(conns)
+    print(assigns)
+    print("\n\n")
 
 
 if __name__ == "__main__":

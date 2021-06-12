@@ -70,6 +70,12 @@ MACRO DIGITALTBD
         RECT -4.000 173.930 2.400 174.490 ;
     END
   END jtag_TDI
+  PIN uart_0_rxd
+    PORT
+      LAYER met3 ;
+        RECT -4.000 19.540 2.400 20.100 ;
+    END
+  END uart_0_rxd
   PIN serial_tl_bits_in_valid
     PORT
       LAYER met3 ;
@@ -208,12 +214,6 @@ MACRO DIGITALTBD
         RECT -4.000 37.270 2.400 37.830 ;
     END
   END uart_0_txd
-  PIN uart_0_rxd
-    PORT
-      LAYER met3 ;
-        RECT -4.000 13.630 2.400 14.190 ;
-    END
-  END uart_0_rxd
   PIN serial_tl_bits_out_valid
     PORT
       LAYER met3 ;
