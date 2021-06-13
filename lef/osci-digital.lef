@@ -2,9 +2,9 @@ VERSION 5.7 ;
   NOWIREEXTENSIONATPIN ON ;
   DIVIDERCHAR "/" ;
   BUSBITCHARS "[]" ;
-MACRO DIGITALTBD
+MACRO Digital
   CLASS BLOCK ;
-  FOREIGN DIGITALTBD ;
+  FOREIGN Digital ;
   ORIGIN 0.000 0.000 ;
   
   # FIXME: Reduce from `caravel_user` by (10x10)um (5um per side)
@@ -243,12 +243,12 @@ MACRO DIGITALTBD
         RECT 2897.600 1813.010 2904.000 1813.570 ;
     END
   END gpio_0_2_o
-  PIN adc_clk
+  PIN adc_clock
     PORT
       LAYER met2 ;
         RECT 1452.620 2611.000 1453.180 2617.400 ;
     END
-  END adc_clk
+  END adc_clock
   PIN adc_data[0]
     PORT
       LAYER met2 ;
@@ -300,6 +300,6 @@ MACRO DIGITALTBD
   OBS 
     # Removing all obstructions
   END
-END DIGITALTBD
+END Digital
 END LIBRARY
 
