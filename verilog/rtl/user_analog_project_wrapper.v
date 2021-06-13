@@ -18,7 +18,7 @@
 // e.g. when running stand-alone testing. 
 `define MPRJ_IO_PADS  38
 `define ANALOG_PADS   11
-
+`define USE_POWER_PINS
 
 `default_nettype none
 /*
