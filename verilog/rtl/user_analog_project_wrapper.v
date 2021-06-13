@@ -324,7 +324,7 @@ module core(
 Digital xdig (
   .adc_clock(adc_clock),
   .adc_data(adc_data),
-  
+
   .jtag_TCK(jtag_TCK), 
   .jtag_TMS(jtag_TMS), 
   .jtag_TDI(jtag_TDI), 
@@ -393,6 +393,7 @@ module ana (
     inout [2:0] io_clamp_high,    // FIXME: handling these
     inout [2:0] io_clamp_low      // FIXME: handling these
 );
+  assign adc_data = 8'b0;
 endmodule
 
 /// 
