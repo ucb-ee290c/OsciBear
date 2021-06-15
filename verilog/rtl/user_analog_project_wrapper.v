@@ -34,14 +34,14 @@
 
 module user_analog_project_wrapper (
 `ifdef USE_POWER_PINS
-    inout vdda1,	// User area 1 3.3V supply
-    inout vdda2,	// User area 2 3.3V supply
-    inout vssa1,	// User area 1 analog ground
-    inout vssa2,	// User area 2 analog ground
-    inout vccd1,	// User area 1 1.8V supply
-    inout vccd2,	// User area 2 1.8v supply
-    inout vssd1,	// User area 1 digital ground
-    inout vssd2,	// User area 2 digital ground
+    inout vdda1,	// User area 1 3.3V supply - unused
+    inout vdda2,	// User area 2 3.3V supply - unused
+    inout vssa1,	// User area 1 analog ground - unused
+    inout vssa2,	// User area 2 analog ground - unused
+    inout vccd1,	// User area 1 1.8V supply - VDD_D
+    inout vccd2,	// User area 2 1.8v supply - VDD_A
+    inout vssd1,	// User area 1 digital ground - VSS
+    inout vssd2,	// User area 2 digital ground - VSS
 `endif
 
     // Wishbone Slave ports (WB MI A)
@@ -125,6 +125,19 @@ module user_analog_project_wrapper (
     output [2:0] user_irq // Tied low
 );
 
+// Supply Ties 
+wire VDD_A, VDD_D, VSS;
+`ifdef USE_POWER_PINS
+  assign vccd1 = VDD_D;
+  assign vccd2 = VDD_A;
+  assign vssd1 = VSS;
+  assign vssd2 = VSS;
+`else 
+  assign VDD_D = 1'b1;
+  assign VDD_A = 1'b1;
+  assign VSS = 1'b0;
+`endif 
+
 // Output Tie-Offs
 assign wbs_ack_o = 1'b0;
 assign wbs_dat_o = 32'b0;
@@ -162,11 +175,10 @@ We'll avoid using it unless unavoidable.
 ====================================== */
 core xcore (
 
-    // FIXME: supply assignments 
-    // Particularly what to do with all these VSSes 
-    .VDD_A(vccd1),  // 1.8V 
-    .VDD_D(vccd2),  // Also 1.8V 
-    .VSS(vssd1),  
+    // Supplies
+    .VDD_A(VDD_A),  // 1.8V 
+    .VDD_D(VDD_D),  // Also 1.8V 
+    .VSS(VSS),  
 
     // Digital Pins 
     .serial_tl_clock(io_out[0]), 
@@ -322,6 +334,10 @@ module core(
   
 // Digital Instance 
 Digital xdig (
+  // Supplies 
+  .VDD(VDD_D), 
+  .VSS(VSS),
+
   .adc_clock(adc_clock),
   .adc_data(adc_data),
 
@@ -402,6 +418,9 @@ endmodule
 /// IO frame matching the PnR target
 /// 
 module Digital( // @[chipyard.TestHarness.EE290CBLEConfig.fir 295616:2]
+  // Supplies 
+  inout   VDD, VSS,
+
   output adc_clock,
   input [7:0] adc_data,
   input   jtag_TCK, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
