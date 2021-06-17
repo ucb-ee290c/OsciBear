@@ -126,15 +126,11 @@ module user_analog_project_wrapper (
 );
 
 // Supply Ties 
-wire VDD_A, VDD_D, VSS;
-`ifdef USE_POWER_PINS
-  assign vccd1 = VDD_D;
-  assign vccd2 = VDD_A;
+wire VSS;
+`ifdef USE_POWER_PINS 
   assign vssd1 = VSS;
   assign vssd2 = VSS;
-`else 
-  assign VDD_D = 1'b1;
-  assign VDD_A = 1'b1;
+`else  
   assign VSS = 1'b0;
 `endif 
 
@@ -176,8 +172,8 @@ We'll avoid using it unless unavoidable.
 core xcore (
 
     // Supplies
-    .VDD_A(VDD_A),  // 1.8V 
-    .VDD_D(VDD_D),  // Also 1.8V 
+    .VDD_A(vccd2),  // 1.8V 
+    .VDD_D(vccd1),  // Also 1.8V 
     .VSS(VSS),  
 
     // Digital Pins 
