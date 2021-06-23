@@ -3,7 +3,11 @@
 set -e
 
 make install 
-make precheck 
+
+make precheck \
+	CARAVEL_ROOT=${PWD}/caravel \
+	PRECHECK_ROOT=${PWD}/open_mpw_precheck 
+
 make run-precheck \
 	CARAVEL_ROOT=${PWD}/caravel \
 	PRECHECK_ROOT=${PWD}/open_mpw_precheck \
