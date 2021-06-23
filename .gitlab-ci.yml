@@ -1,0 +1,7 @@
+
+efab-prechecks:
+  stage: test
+  script:
+    - bash efab-prechecks.sh
+
+
