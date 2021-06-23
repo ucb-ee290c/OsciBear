@@ -1,4 +1,6 @@
 
+tags: ['swtech130']
+
 efab-prechecks:
   stage: test
   script:
