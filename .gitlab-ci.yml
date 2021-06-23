@@ -1,8 +1,8 @@
 
-tags: ['swtech130']
 
 efab-prechecks:
   stage: test
+  tags: ['swtech130']
   script:
     - bash efab-prechecks.sh
 
