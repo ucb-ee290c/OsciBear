@@ -1,4 +1,6 @@
 
+variables:
+  GIT_STRATEGY: clone
 
 efab-prechecks:
   stage: test
