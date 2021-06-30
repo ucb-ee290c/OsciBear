@@ -11,6 +11,6 @@ make precheck \
 make run-precheck \
 	CARAVEL_ROOT=${PWD}/caravel \
 	PRECHECK_ROOT=${PWD}/open_mpw_precheck \
-	PDK_ROOT=/tools/B/dan_fritchman/sky130/local/sky130A
+	PDK_ROOT=/tools/B/dan_fritchman/sky130/local
 
 
