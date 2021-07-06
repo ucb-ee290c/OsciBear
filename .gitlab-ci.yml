@@ -1,0 +1,11 @@
+
+variables:
+  GIT_STRATEGY: clone
+
+efab-prechecks:
+  stage: test
+  tags: ['swtech130']
+  script:
+    - bash efab-prechecks.sh
+
+
