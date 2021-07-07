@@ -334,7 +334,7 @@ Digital xdig (
   .VDD(VDD_D), 
   .VSS(VSS),
 
-  .adc_clock(adc_clock),
+  .adc_clk(adc_clock),
   .adc_data(adc_data),
 
   .jtag_TCK(jtag_TCK), 
@@ -382,38 +382,48 @@ Digital xdig (
   .clock(clock) 
 );
 
-// Analog Instance 
-wire [8:0] dp, dm, dn;
-wire top_n, top_p;
-wire [7:0] bot_n, bot_p;
-wire clk16, clk_out;
-wire comp_clk, comp_n, comp_p;
-adc xadc (
+ADC xadc(
   .VDD(VDD_A),
   .VSS(VSS),
   .clk(adc_clock),
   .data_out(adc_data),
   .vref(io_analog[8:6]),
   .in_n(io_analog[5]),
-  .in_p(io_analog[4]),
-  .osp(1'b0),
-  .osn(1'b0),
-  .dp(dp),
-  .dm(dm),
-  .dn(dn),
-  .top_n(top_n),
-  .top_p(top_p),
-  .bot_n(bot_n),
-  .bot_p(bot_p),
-  .clk_b(1'b0),
-  .clk_e(1'b0),
-  .clk16(clk16),
-  .clk_out(clk_out),
-  .comp_clk(comp_clk),
-  .comp_n(comp_n),
-  .comp_p(comp_p)
-
+  .in_p(io_analog[4])
 );
+
+// Analog Instance 
+//wire [8:0] dp, dm, dn;
+//wire top_n, top_p;
+//wire [7:0] bot_n, bot_p;
+//wire clk16, clk_out;
+//wire comp_clk, comp_n, comp_p;
+//adc xadc (
+//  .VDD(VDD_A),
+//  .VSS(VSS),
+//  .clk(adc_clock),
+//  .data_out(adc_data),
+//  .vref(io_analog[8:6]),
+//  .in_n(io_analog[5]),
+//  .in_p(io_analog[4]),
+//  .osp(1'b0),
+//  .osn(1'b0),
+//  .dp(dp),
+//  .dm(dm),
+//  .dn(dn),
+//  .top_n(top_n),
+//  .top_p(top_p),
+//  .bot_n(bot_n),
+//  .bot_p(bot_p),
+//  .clk_b(1'b0),
+// .clk_e(1'b0),
+//  .clk16(clk16),
+//  .clk_out(clk_out),
+//  .comp_clk(comp_clk),
+//  .comp_n(comp_n),
+//  .comp_p(comp_p)
+
+//);
 
 //ana xana (
 //  .VDD(VDD_A), 
@@ -430,36 +440,47 @@ endmodule
 /// 
 /// # Chip Analog Shell 
 /// 
-module adc (
-    inout   VDD, VSS,
-    input   clk,
-    output [7:0]  data_out,
-    inout [2:0] vref,
-    input in_n, in_p,
+//only these pins have to be connected to something
+module ADC (
+  inout VDD, VSS,
+  input clk,
+  output [7:0] data_out,
+  inout [2:0] vref,
+  input in_n, in_p
+);
+endmodule
 
-    inout top_n, top_p,
-    inout [7:0] bot_n, bot_p,
-    output [8:0] dm, dp, dn,
-    output comp_clk, comp_n, comp_p,
-    output clk16, clk_out,
-    input osn, osp,
-    input clk_b, clk_e
+//full ADC pins
+//module adc (
+//    inout   VDD, VSS,
+//    input   clk,
+//    output [7:0]  data_out,
+//    inout [2:0] vref,
+//    input in_n, in_p,
+
+//    inout top_n, top_p,
+//    inout [7:0] bot_n, bot_p,
+//    output [8:0] dm, dp, dn,
+//    output comp_clk, comp_n, comp_p,
+//    output clk16, clk_out,
+//    input osn, osp,
+//    input clk_b, clk_e
     //inout [`ANALOG_PADS-1:0] io_analog,
     //inout [2:0] io_clamp_high,    // FIXME: handling these
     //inout [2:0] io_clamp_low      // FIXME: handling these
-);
-  assign data_out = 8'b0;
-  assign dm = 9'b0;
-  assign dp = 9'b0;
-  assign dn = 9'b0;
-  assign comp_clk = 1'b0;
-  assign comp_n = 1'b1;
-  assign comp_p = 1'b1;
-  assign clk16 = 1'b0;
-  assign clk_out = 1'b0;
-  assign top_n = 1'b0;
-  assign top_p = 1'b0;
-endmodule
+//);
+//  assign data_out = 8'b0;
+//  assign dm = 9'b0;
+//  assign dp = 9'b0;
+//  assign dn = 9'b0;
+//  assign comp_clk = 1'b0;
+//  assign comp_n = 1'b1;
+//  assign comp_p = 1'b1;
+//  assign clk16 = 1'b0;
+//  assign clk_out = 1'b0;
+//  assign top_n = 1'b0;
+//  assign top_p = 1'b0;
+//endmodule
 
 /// 
 /// # Chip Digital Shell
@@ -470,7 +491,7 @@ module Digital( // @[chipyard.TestHarness.EE290CBLEConfig.fir 295616:2]
   // Supplies 
   inout   VDD, VSS,
 
-  output adc_clock,
+  output adc_clk,
   input [7:0] adc_data,
   input   jtag_TCK, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
   input   jtag_TMS, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
