@@ -193,7 +193,7 @@ core xcore (
     .gpio_0_2_i(io_in[9]), 
     .gpio_0_2_o(io_out[9]), 
     .gpio_0_2_oe(io_oeb[9]), 
-    .reset_wire_reset(io_in[10]), 
+    .reset(io_in[10]), 
     .clock(io_in[11]), 
     .spi_0_sck(io_out[14]), 
     .spi_0_cs_0(io_out[15]), 
@@ -235,8 +235,8 @@ assign io_out[4] = 1'b0; // serial_tl_bits_out_ready
 assign io_oeb[4] = 1'b1; // serial_tl_bits_out_ready 
 assign io_oeb[5] = 1'b0; // serial_tl_bits_out_valid 
 assign io_oeb[6] = 1'b0; // serial_tl_bits_out_bits 
-assign io_out[10] = 1'b0; // reset_wire_reset 
-assign io_oeb[10] = 1'b1; // reset_wire_reset 
+assign io_out[10] = 1'b0; // reset
+assign io_oeb[10] = 1'b1; // reset
 assign io_out[11] = 1'b0; // clock 
 assign io_oeb[11] = 1'b1; // clock 
 assign io_out[12] = 1'b0; // Unused 
@@ -314,7 +314,7 @@ module core(
   output  uart_0_txd, 
   input   uart_0_rxd, 
   input   bsel, 
-  input   reset_wire_reset, 
+  input   reset, 
   input   clock, 
 
   // Analog Pins 
@@ -378,7 +378,7 @@ Digital xdig (
   .uart_0_txd(uart_0_txd), 
   .uart_0_rxd(uart_0_rxd), 
   .bsel(bsel), 
-  .reset_wire_reset(reset_wire_reset), 
+  .reset(reset), 
   .clock(clock) 
 );
 
