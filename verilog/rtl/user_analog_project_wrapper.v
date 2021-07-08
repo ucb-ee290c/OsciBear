@@ -334,7 +334,7 @@ Digital xdig (
   .VDD(VDD_D), 
   .VSS(VSS),
 
-  .adc_clk(adc_clock),
+  .adc_clock(adc_clock),
   .adc_data(adc_data),
 
   .jtag_TCK(jtag_TCK), 
@@ -378,23 +378,18 @@ Digital xdig (
   .uart_0_txd(uart_0_txd), 
   .uart_0_rxd(uart_0_rxd), 
   .bsel(bsel), 
-  .reset_wire_reset(reset), //.reset(reset) 
+  .reset(reset), 
   .clock(clock) 
 );
 
-//AAA_Slice_edit_sampfix_SA_wrap xadc(
-//  .VDD(VDD_A),
-//  .VSS(VSS),
-//  .clk(adc_clock),
-//  .data_out(adc_data),
-//  .vref(io_analog[8:6]),
-//  .in_n(io_analog[5]),
-//  .in_p(io_analog[4])
-//);
 
-// Analog Instance 
-
+// ADC Tie-Offs/ Unconnected Ports
 wire data0;
+wire comp_p, comp_n, comp_clk, clk_out, clk16, top_p, top_n;
+wire [8:0] dm, dp, dn;
+wire [7:0] bot_p, bot_n; 
+
+// ADC Instance 
 AAA_Slice_edit_sampfix_SA_wrap xadc ( // have to change to ADC if using wrapper
   .VDD(VDD_A),
   .VSS(VSS),
@@ -403,128 +398,19 @@ AAA_Slice_edit_sampfix_SA_wrap xadc ( // have to change to ADC if using wrapper
   .vref(io_analog[8:6]),
   .in_n(io_analog[5]),
   .in_p(io_analog[4]),
-  .dp(),
-  .dm(),
-  .dn(),
-  .top_n(),
-  .top_p(),
-  .bot_n(),
-  .bot_p(),
-  .clk16(),
-  .clk_out(),
-  .comp_clk(),
-  .comp_n(),
-  .comp_p()
+  .dp(dp),
+  .dm(dm),
+  .dn(dn),
+  .top_n(top_n),
+  .top_p(top_p),
+  .bot_n(bot_n),
+  .bot_p(bot_p),
+  .clk16(clk16),
+  .clk_out(clk_out),
+  .comp_clk(comp_clk),
+  .comp_n(comp_n),
+  .comp_p(comp_p)
 );
 
-//ana xana (
-//  .VDD(VDD_A), 
-//  .VSS(VSS),
-//  .adc_clock(adc_clock),
-//  .adc_data(adc_data),
-//  .io_analog(io_analog),
-//  .io_clamp_high(io_clamp_high),   // FIXME: handling these
-//  .io_clamp_low(io_clamp_low)      // FIXME: handling these
-//);
-
 endmodule
-
-/// 
-/// # Chip Analog Shell 
-/// 
-//only these pins have to be connected to something
-//module AAA_Slice_edit_sampfix_SA_wrap (
-//  inout VDD, VSS,
-//  input clk,
-//  output [7:0] data_out,
-//  inout [2:0] vref,
-//  input in_n, in_p
-//);
-//endmodule
-
-//full ADC pins
-module AAA_Slice_edit_sampfix_SA_wrap ( //have to change to ADC if using wrapper
-    inout   VDD, VSS,
-    input   clk,
-    output [8:0]  data_out,
-    inout [2:0] vref,
-    input in_n, in_p,
-
-    inout top_n, top_p,
-    inout [7:0] bot_n, bot_p,
-    output [8:0] dm, dp, dn,
-    output comp_clk, comp_n, comp_p,
-    output clk16, clk_out
-    //inout [`ANALOG_PADS-1:0] io_analog,
-    //inout [2:0] io_clamp_high,    // FIXME: handling these
-    //inout [2:0] io_clamp_low      // FIXME: handling these
-);
-endmodule
-
-
-/// 
-/// # Chip Digital Shell
-/// 
-/// IO frame matching the PnR target
-/// 
-module Digital( // @[chipyard.TestHarness.EE290CBLEConfig.fir 295616:2]
-  // Supplies 
-  inout   VDD, VSS,
-
-  output adc_clk,
-  input [7:0] adc_data,
-  input   jtag_TCK, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
-  input   jtag_TMS, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
-  input   jtag_TDI, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
-  output  jtag_TDO_data, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295618:4]
-  
-  output  serial_tl_clock, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
-  output  serial_tl_bits_in_ready, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
-  input   serial_tl_bits_in_valid, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
-  input   serial_tl_bits_in_bits, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
-  input   serial_tl_bits_out_ready, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
-  output  serial_tl_bits_out_valid, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
-  output  serial_tl_bits_out_bits, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295619:4]
-  
-  input   gpio_0_0_i,
-  output  gpio_0_0_o,
-  output  gpio_0_0_oe,
-  
-  input   gpio_0_1_i,
-  output  gpio_0_1_o,
-  output  gpio_0_1_oe,
-
-  input   gpio_0_2_i,
-  output  gpio_0_2_o,
-  output  gpio_0_2_oe,
-
-  output  spi_0_sck, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295622:4]
-  output  spi_0_cs_0, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295622:4]
-
-  input   spi_0_dq_0_i,
-  output  spi_0_dq_0_o,
-  output  spi_0_dq_0_oe,
-
-  input   spi_0_dq_1_i,
-  output  spi_0_dq_1_o,
-  output  spi_0_dq_1_oe,
-
-  input   spi_0_dq_2_i,
-  output  spi_0_dq_2_o,
-  output  spi_0_dq_2_oe,
-  
-  input   spi_0_dq_3_i,
-  output  spi_0_dq_3_o,
-  output  spi_0_dq_3_oe,
-  
-  output  uart_0_txd, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295623:4]
-  input   uart_0_rxd, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295623:4]
-  input   bsel, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295624:4]
-  input   reset_wire_reset, // @[chipyard.TestHarness.EE290CBLEConfig.fir 295625:4]
-  input   clock // @[chipyard.TestHarness.EE290CBLEConfig.fir 295626:4]
-);
-endmodule
-
-
-
 
