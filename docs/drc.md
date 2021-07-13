@@ -1,6 +1,6 @@
 # DRC Waiver Requests and Notes 
 
-UC Berkeley "OsciBear" ChipIgnite Submission
+UC Berkeley "OsciBear" ChipIgnite Submission  
 July 2021 
 
 
@@ -38,17 +38,22 @@ In each case the commercial deck includes a similar rule and does not report sim
 * `licon.16a` - "all taps must be contacted" 
 
   * This check appears to misinterpret a number of n-well and substrate taps in the design's custom ADC logic. 
-  * Notably the commerical deck includes the same rule and same threshold, and does not report this portion of layout as being in violation.
+  * Notably the commerical deck includes the same rule and does not report this portion of layout as being in violation.
+    
 
   ![image-20210713114500425](licon16.png)
 
 * "Can't Overlap Those Layers"
   * While this rule does not specify which layers it forbids overlapping, its location-markers indicate n-well and/or substrate taps in the design's custom ADC logic. Like `licon.16`, this appears to be a misinterpretation of the taps, not reported by the commercial deck. 
+    
 
 ![image-20210713113649302](cant_overlap.png)
 
+
+
 * `hvi.5` - "HVI to HVI or LV n-well spacing" appears due to the same tap-misidentifications
-  * Notably this is not reported by any of the UCB team's local runs of the submission checks, so available debug information is more limited than for the other checks. 
+  * Notably this violation is not reported by any of the UCB team's local runs of the submission checks, so available debug information is more limited than for the other checks. 
+    
 
 * `met4.5a` - spacing of large & small metal 4 
   * This appears to be a misinterpretation of the 0.4µm minimum distance rule. Neither the Manhattan (sum) nor the direct distance between the reported shapes is less than the minimum 0.4µm. 
