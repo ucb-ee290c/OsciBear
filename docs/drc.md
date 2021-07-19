@@ -3,6 +3,8 @@
 UC Berkeley "OsciBear" ChipIgnite Submission  
 July 2021 
 
+FIXME!
+https://github.com/efabless/sky130_sram_macros/tree/4020110241dff0a9face2461b556e958c4bd88a7
 
 
 ## Initial Commentary 
@@ -17,9 +19,7 @@ This note includes both requests for waivers of the Magic-reported DRC violation
 
 The designers of the UCB "OsciBear" request DRC waivers, and assume responsibility for, each of the errors reported on its final submission-check run: 
 
-![image-20210713105353054](drc.md.png)
-
-
+![image-20210719111304265](drc.md.png)
 
 Commentary on each violation: 
 
@@ -39,13 +39,11 @@ In each case the commercial deck includes a similar rule and does not report sim
 
   * This check appears to misinterpret a number of n-well and substrate taps in the design's custom ADC logic. 
   * Notably the commerical deck includes the same rule and does not report this portion of layout as being in violation.
-    
-
+  
   ![image-20210713114500425](licon16.png)
-
+  
 * "Can't Overlap Those Layers"
   * While this rule does not specify which layers it forbids overlapping, its location-markers indicate n-well and/or substrate taps in the design's custom ADC logic. Like `licon.16`, this appears to be a misinterpretation of the taps, not reported by the commercial deck. 
-    
 
 ![image-20210713113649302](cant_overlap.png)
 
@@ -53,17 +51,7 @@ In each case the commercial deck includes a similar rule and does not report sim
 
 * `hvi.5` - "HVI to HVI or LV n-well spacing" appears due to the same tap-misidentifications
   * Notably this violation is not reported by any of the UCB team's local runs of the submission checks, so available debug information is more limited than for the other checks. 
-    
-
-* `met4.5a` - spacing of large & small metal 4 
-  * This appears to be a misinterpretation of the 0.4µm minimum distance rule. Neither the Manhattan (sum) nor the direct distance between the reported shapes is less than the minimum 0.4µm. 
-  * Notably the commerical deck includes the same rule and same threshold, and does not report this portion of layout as being in violation.
-    
-    
-
-![image-20210713114127237](m4-spacing.png)
-
-
+  
 
 
 
@@ -80,8 +68,6 @@ Violations against the commercial deck are pictured below. Each boils down to on
 
 ![image-20210713110815414](comm-deck.png)
 
-
-
 Commentary on each class of violation: 
 
 * `metblk.6` is the most common error, noting the deck's desire to remove `prBoundary` layout-shapes. This can be waived. 
@@ -94,14 +80,12 @@ Commentary on each class of violation:
 
 The remaining violation-reports occur in the OpenRAM SRAM cell periphery: 
 
-* `m2.2` minimum spacing/ notch 
-* `m3.2` minimum spacing/ notch 
 * `psd.{1,2}` minimum spacing/ notch of psdm 
 * `nsd.{1,2}` minimum spacing/ notch of nsdm 
 * `pwde.5` "dnwell must be enclosed by pwde_uhvi"
 * `nwell.6` min enclosure of newllHole by dnwell 
 
-The UCB team is unable to assess which of these rules and violations might be relaxed by specialty SRAM marker layers or similar rule-modifying annotations. (All occur in the periphery and control logic, so we suspect none.) 
+The UCB team is unable to assess which of these rules and violations might be relaxed by specialty SRAM marker layers or similar rule-modifying annotations. 
 
 We nonetheless hope these results can aid any of (a) other designers using the OpenRAM macros, (b) the OpenRAM macro designers, or (c) the tape-out verification process. 
 
